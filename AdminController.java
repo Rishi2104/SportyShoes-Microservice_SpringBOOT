@@ -115,17 +115,13 @@ public ModelAndView getShoess(HttpServletRequest req,HttpServletResponse res) {
 	log.info("sent a list to the jsp");
 	return mv;
 }
-
-@RequestMapping("insert")
-public ModelAndView insert(HttpServletRequest req,HttpServletResponse res) {
-	String temp=req.getParameter("sid");
-	int id=Integer.parseInt(temp);
-	String size=req.getParameter("size");
-	String sprice=req.getParameter("sprice");
-	String stype=req.getParameter("stype");
-	log.info("recieved Shoe info from front end");
+@ResponseBody
+@RequestMapping("/insert")
+public ModelAndView insert(HttpServletRequest req,HttpServletResponse res,@RequestParam("id") String sid,@RequestParam("size") String size,@RequestParam("sprice") String sprice,@RequestParam("stype") String stype) {
 	ModelAndView mv=new ModelAndView();
-	log.info("model and view object created");
+	log.info("model and view object created (Insert)"+sid+" "+size+" "+sprice+" "+stype);
+	int id=Integer.parseInt(sid);
+	log.info("recieved Shoe info from front end");
 	Shoes s=new Shoes();
 	log.info("pojo object created");
 	s.setId(id);
@@ -143,6 +139,26 @@ public ModelAndView insert(HttpServletRequest req,HttpServletResponse res) {
 	}
 	return mv;
 }
+
+
+
+@ResponseBody
+@RequestMapping("Plist")
+public ModelAndView Plist(HttpServletRequest req,HttpServletResponse res) {
+	log.info("in get all request");
+	ModelAndView mv=new ModelAndView();
+	log.info("created mv object");
+	List<Buy> list=dao.Plist();
+	log.info("called getall method"+list);
+	mv.setViewName("purchaseList.jsp");
+	log.info("went to jsp");
+	mv.addObject("list",list);
+	log.info("sent a list to the jsp");
+	return mv;
+}
+
+
+
 }
 
 

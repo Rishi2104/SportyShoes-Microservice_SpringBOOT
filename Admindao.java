@@ -43,6 +43,11 @@ public class Admindao {
 		return br.byCount();
 	}
 	
+	public List<Buy> Plist(){
+		return br.findAll();
+	}
+	
+	
 /*	public String getSize(int id) {
 		return repo1.getSize(id);
 	}
