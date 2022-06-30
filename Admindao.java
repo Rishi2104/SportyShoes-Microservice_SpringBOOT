@@ -47,6 +47,10 @@ public class Admindao {
 		return br.findAll();
 	}
 	
+	public List<Admin> UserList(){
+		return repo.findAll();
+	}
+	
 	
 /*	public String getSize(int id) {
 		return repo1.getSize(id);

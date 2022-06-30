@@ -27,8 +27,8 @@ public ModelAndView login(HttpServletRequest req,HttpServletResponse res,@Reques
 	
 	ModelAndView mv=new ModelAndView();
 	log.info("inside the request mapping of login");
-	log.info("object from user"+dao.findbyuser(suser));
-	log.info("object from password"+dao.findbypassword(spassword));
+	log.info("object from user: "+dao.findbyuser(suser));
+	log.info("object from password: "+dao.findbypassword(spassword));
 	if(dao.findbyuser(suser)==null)
 	{
 		log.info("-------NULL value CAUGHT....");
@@ -52,10 +52,11 @@ public ModelAndView login(HttpServletRequest req,HttpServletResponse res,@Reques
 
 @ResponseBody
 @RequestMapping("/register")
-public String register(HttpServletRequest req,HttpServletResponse res)
+public ModelAndView register(HttpServletRequest req,HttpServletResponse res)
 {
 	
 	log.info("into the register mapping");
+	ModelAndView mv=new ModelAndView();
 	String suser=req.getParameter("suser");
 	String spassword=req.getParameter("spassword");
 	String semail=req.getParameter("semail");
@@ -63,9 +64,20 @@ public String register(HttpServletRequest req,HttpServletResponse res)
 	RestTemplate rest=new RestTemplate();
 	String url="http://localhost:8082/register-user/"+suser+"/"+spassword+"/"+semail;
 	log.info(url);
-	rest.getForObject(url,String.class);
+	if(rest.getForObject(url,String.class).equals("Successful"))
+	{
+		log.info("Successfully registered.");
+		mv.setViewName("successfulRegistered.jsp");
+	}
+	else {
+		log.info("Failed registeration");
+		mv.setViewName("fallsRegister.jsp");
+	}
+	
+		
 	log.info("went to register ms");
-	return "success";
+	return mv;
+	
 }
 
 
@@ -156,6 +168,26 @@ public ModelAndView Plist(HttpServletRequest req,HttpServletResponse res) {
 	log.info("sent a list to the jsp");
 	return mv;
 }
+
+
+@ResponseBody
+@RequestMapping("UserList")
+public ModelAndView UserList(HttpServletRequest req,HttpServletResponse res) {
+	log.info("in get all request");
+	ModelAndView mv=new ModelAndView();
+	log.info("created mv object");
+	List<Admin> list=dao.UserList();
+	log.info("called getall method"+list);
+	mv.setViewName("UserList.jsp");
+	log.info("went to jsp");
+	mv.addObject("list",list);
+	log.info("sent a list to the jsp");
+	return mv;
+}
+
+
+
+
 
 
 
